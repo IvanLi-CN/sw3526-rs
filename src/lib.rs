@@ -34,6 +34,7 @@ where
         }
     }
 
+    #[inline(always)]
     pub async fn get_chip_version(&mut self) -> Result<u8, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -42,6 +43,7 @@ where
         Ok(buf[0] & 0x03)
     }
 
+    #[inline(always)]
     pub async fn get_buck_output_millivolts(&mut self) -> Result<u16, E> {
         let mut buf_h = [0u8; 1];
         let mut buf_l = [0u8; 1];
@@ -64,6 +66,7 @@ where
         Ok((((buf_h[0] as u16) << 4) | ((buf_l[0] as u16) >> 4)) * 10)
     }
 
+    #[inline(always)]
     pub async fn get_buck_output_limit_milliamps(&mut self) -> Result<u16, E> {
         let mut buf = [0u8; 1];
 
@@ -74,6 +77,7 @@ where
         Ok(1000u16 + ((buf[0] as u16) & 0x3f) * 50)
     }
 
+    #[inline(always)]
     pub async fn get_protocol(&mut self) -> Result<ProtocolIndicationResponse, E> {
         let mut buf = [0u8; 1];
 
@@ -84,6 +88,7 @@ where
         Ok(buf[0].into())
     }
 
+    #[inline(always)]
     pub async fn get_system_status(&mut self) -> Result<SystemStatusResponse, E> {
         let mut buf = [0u8; 1];
 
@@ -94,6 +99,7 @@ where
         Ok(buf[0].into())
     }
 
+    #[inline(always)]
     pub async fn get_abnormal_case(&mut self) -> Result<AbnormalCaseResponse, E> {
         let mut buf = [0u8; 1];
 
@@ -106,12 +112,14 @@ where
 
     /// set i2c writable
     /// After doing following step then reg0xA0~BF, reg0x70~71 and reg0x13 can be written by MCU
+    #[inline(always)]
     pub async fn set_i2c_writable(&mut self) -> Result<(), E> {
         self.i2c
             .write(ADDRESS, &[Register::I2cEnable as u8, 0x20, 0x40, 0x80])
             .await
     }
 
+    #[inline(always)]
     pub async fn get_buck_force_off(&mut self) -> Result<BuckForceOffConfig, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -121,12 +129,14 @@ where
         Ok(buf[0].into())
     }
 
+    #[inline(always)]
     pub async fn set_buck_force_off(&mut self, config: BuckForceOffConfig) -> Result<(), E> {
         self.i2c
             .write(ADDRESS, &[Register::BuckForceOff as u8, config.into()])
             .await
     }
 
+    #[inline(always)]
     pub async fn get_adc_input_millivolts(&mut self) -> Result<u16, E> {
         let mut buf = [0u8; 1];
 
@@ -136,6 +146,7 @@ where
         Ok(((buf[0] as u16) << 4) * 10)
     }
 
+    #[inline(always)]
     pub async fn get_adc_output_millivolts(&mut self) -> Result<u16, E> {
         let mut buf = [0u8; 1];
 
@@ -145,6 +156,7 @@ where
         Ok(((buf[0] as u16) << 4) * 6)
     }
 
+    #[inline(always)]
     pub async fn get_adc_output_milliamps(&mut self) -> Result<f32, E> {
         let mut buf = [0u8; 1];
 
@@ -154,6 +166,7 @@ where
         Ok((((buf[0] as u16) << 4) as f32) * 2.5)
     }
 
+    #[inline(always)]
     pub async fn get_adc_config(&mut self) -> Result<AdcConfig, E> {
         let mut buf = [0u8; 1];
 
@@ -169,6 +182,7 @@ where
     }
 
     /// Set the ADC data type
+    #[inline(always)]
     pub async fn set_adc_config(&mut self, config: AdcConfig) -> Result<(), E> {
         self.i2c
             .write(ADDRESS, &[Register::AdcConfig as u8, config as u8])
@@ -181,6 +195,7 @@ where
 
     /// Get the ADC value in raw format
     /// The meaning of the value representation is specified by reg 0x31
+    #[inline(always)]
     pub async fn get_adc_data_raw(&mut self) -> Result<u16, E> {
         let mut buf_h = [0u8; 1];
         let mut buf_l = [0u8; 1];
@@ -198,6 +213,7 @@ where
     /// Get the ADC value in millivolts or milliamps
     /// The meaning of the value representation is specified by reg 0x31
     /// Returns None if the ADC config is not set through `set_adc_config`
+    #[inline(always)]
     pub async fn get_adc_data(&mut self) -> Result<Option<f32>, E> {
         if self.adc_config.is_none() {
             return Ok(None);
@@ -216,6 +232,7 @@ where
 
     /// Get this register indicates the power value set by Rset or reg0xA7.
     /// Value range is 0x00 to 0x7F, units are watts
+    #[inline(always)]
     pub async fn get_limit_watts(&mut self) -> Result<u8, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -225,6 +242,7 @@ where
     }
 
     /// get CC status
+    #[inline(always)]
     pub async fn get_cc_status(&mut self) -> Result<CcStatus, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -234,6 +252,7 @@ where
     }
 
     /// get power command request
+    #[inline(always)]
     pub async fn get_power_command_request(
         &mut self,
     ) -> Result<PowerCommandRequest, OperationError<E>> {
@@ -246,6 +265,7 @@ where
     }
 
     /// set power command request
+    #[inline(always)]
     pub async fn set_power_command_request(
         &mut self,
         config: PowerCommandRequest,
@@ -262,6 +282,7 @@ where
     }
 
     /// send pd hard reset
+    #[inline(always)]
     pub async fn send_pd_hard_reset(&mut self) -> Result<(), E> {
         self.set_power_command_request(PowerCommandRequest {
             send_enabled: true,
@@ -271,6 +292,7 @@ where
     }
 
     /// get fast charge config 6
+    #[inline(always)]
     pub async fn get_fast_charge_config_6(&mut self) -> Result<FastChargeConfig6, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -280,19 +302,15 @@ where
     }
 
     /// set fast charge config 6
+    #[inline(always)]
     pub async fn set_fast_charge_config_6(&mut self, config: FastChargeConfig6) -> Result<(), E> {
         self.i2c
-            .write(
-                ADDRESS,
-                &[
-                    Register::FastChargeConfig6 as u8,
-                    config.into(),
-                ],
-            )
+            .write(ADDRESS, &[Register::FastChargeConfig6 as u8, config.into()])
             .await
     }
 
     /// get fast charge config 5
+    #[inline(always)]
     pub async fn get_fast_charge_config_5(&mut self) -> Result<FastChargeConfig5, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -302,19 +320,15 @@ where
     }
 
     /// set fast charge config 5
+    #[inline(always)]
     pub async fn set_fast_charge_config_5(&mut self, config: FastChargeConfig5) -> Result<(), E> {
         self.i2c
-            .write(
-                ADDRESS,
-                &[
-                    Register::FastChargeConfig5 as u8,
-                    config.into(),
-                ],
-            )
+            .write(ADDRESS, &[Register::FastChargeConfig5 as u8, config.into()])
             .await
     }
 
     /// get power config
+    #[inline(always)]
     pub async fn get_output_limit_watts(&mut self) -> Result<u8, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -331,6 +345,7 @@ where
 
     /// set power config
     /// Value range is [12, 71].
+    #[inline(always)]
     pub async fn set_output_limit_watts(&mut self, watts: u8) -> Result<(), E> {
         let raw = if watts < 8 { watts - 64 } else { watts };
 
@@ -340,6 +355,7 @@ where
     }
 
     /// get fast charge config 0
+    #[inline(always)]
     pub async fn get_fast_charge_config_0(&mut self) -> Result<FastChargeConfig0, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -349,6 +365,7 @@ where
     }
 
     /// set fast charge config 0
+    #[inline(always)]
     pub async fn set_fast_charge_config_0(&mut self, config: FastChargeConfig0) -> Result<(), E> {
         self.i2c
             .write(ADDRESS, &[Register::FastChargeConfig0 as u8, config.into()])
@@ -356,6 +373,7 @@ where
     }
 
     /// get fast charge config 1
+    #[inline(always)]
     pub async fn get_fast_charge_config_1(&mut self) -> Result<FastChargeConfig1, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -365,6 +383,7 @@ where
     }
 
     /// set fast charge config 1
+    #[inline(always)]
     pub async fn set_fast_charge_config_1(&mut self, config: FastChargeConfig1) -> Result<(), E> {
         self.i2c
             .write(ADDRESS, &[Register::FastChargeConfig1 as u8, config.into()])
@@ -372,6 +391,7 @@ where
     }
 
     /// get fast charge config 2
+    #[inline(always)]
     pub async fn get_fast_charge_config_2(&mut self) -> Result<FastChargeConfig2, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -381,6 +401,7 @@ where
     }
 
     /// set fast charge config 2
+    #[inline(always)]
     pub async fn set_fast_charge_config_2(&mut self, config: FastChargeConfig2) -> Result<(), E> {
         self.i2c
             .write(ADDRESS, &[Register::FastChargeConfig2 as u8, config.into()])
@@ -388,6 +409,7 @@ where
     }
 
     /// get fast charge config 3
+    #[inline(always)]
     pub async fn get_fast_charge_config_3(&mut self) -> Result<FastChargeConfig3, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -397,6 +419,7 @@ where
     }
 
     /// set fast charge config 3
+    #[inline(always)]
     pub async fn set_fast_charge_config_3(&mut self, config: FastChargeConfig3) -> Result<(), E> {
         self.i2c
             .write(ADDRESS, &[Register::FastChargeConfig3 as u8, config.into()])
@@ -404,6 +427,7 @@ where
     }
 
     /// get fast charge config 4
+    #[inline(always)]
     pub async fn get_fast_charge_config_4(&mut self) -> Result<FastChargeConfig4, E> {
         let mut buf = [0u8; 1];
         self.i2c
@@ -413,6 +437,7 @@ where
     }
 
     /// set fast charge config 4
+    #[inline(always)]
     pub async fn set_fast_charge_config_4(&mut self, config: FastChargeConfig4) -> Result<(), E> {
         self.i2c
             .write(ADDRESS, &[Register::FastChargeConfig4 as u8, config.into()])
@@ -420,6 +445,7 @@ where
     }
 
     /// get USB VID
+    #[inline(always)]
     pub async fn get_vid(&mut self) -> Result<u16, E> {
         let mut buf_l = [0u8; 1];
         let mut buf_h = [0u8; 1];
@@ -433,6 +459,7 @@ where
     }
 
     /// set USB VID
+    #[inline(always)]
     pub async fn set_vid(&mut self, vid: u16) -> Result<(), E> {
         self.i2c
             .write(ADDRESS, &[Register::VidConfig0 as u8, (vid >> 8) as u8])
