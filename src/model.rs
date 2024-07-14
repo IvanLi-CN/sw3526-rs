@@ -136,7 +136,7 @@ impl From<u8> for SystemStatusResponse {
 
 impl From<SystemStatusResponse> for u8 {
     fn from(value: SystemStatusResponse) -> Self {
-        (value.port_status as u8) << 2 | (value.buck_status as u8) << 1
+        (value.port_status as u8) << 1 | (value.buck_status as u8)
     }
 }
 
