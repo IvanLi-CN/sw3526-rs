@@ -115,8 +115,16 @@ where
     #[inline(always)]
     pub async fn set_i2c_writable(&mut self) -> Result<(), E> {
         self.i2c
-            .write(ADDRESS, &[Register::I2cEnable as u8, 0x20, 0x40, 0x80])
-            .await
+            .write(ADDRESS, &[Register::I2cEnable as u8, 0x20])
+            .await?;
+        self.i2c
+            .write(ADDRESS, &[Register::I2cEnable as u8, 0x40])
+            .await?;
+        self.i2c
+            .write(ADDRESS, &[Register::I2cEnable as u8, 0x80])
+            .await?;
+
+        Ok(())
     }
 
     #[inline(always)]
@@ -601,7 +609,11 @@ mod tests {
 
     #[test]
     fn set_i2c_writable() {
-        let i2c_expectations = [Transaction::write(ADDRESS, vec![0x12, 0x20, 0x40, 0x80])];
+        let i2c_expectations = [
+            Transaction::write(ADDRESS, vec![0x12, 0x20]),
+            Transaction::write(ADDRESS, vec![0x12, 0x40]),
+            Transaction::write(ADDRESS, vec![0x12, 0x80]),
+        ];
         let mut i2c = Mock::new(&i2c_expectations);
         let mut sw3526 = SW3526::new(i2c.clone());
 
@@ -910,14 +922,14 @@ mod tests {
 
         let fast_charge_config = sw3526.get_fast_charge_config_0().unwrap();
 
-        assert!(fast_charge_config.scp_enabled == true);
-        assert!(fast_charge_config.vooc_enabled == false);
-        assert!(fast_charge_config.sfcp_enabled == true);
-        assert!(fast_charge_config.qc2_0_enabled == false);
-        assert!(fast_charge_config.qc3_0_enabled == true);
-        assert!(fast_charge_config.fcp_enabled == false);
-        assert!(fast_charge_config.afc_enabled == true);
-        assert!(fast_charge_config.pe_enabled == false);
+        assert!(fast_charge_config.scp_disabled == true);
+        assert!(fast_charge_config.vooc_disabled == false);
+        assert!(fast_charge_config.sfcp_disabled == true);
+        assert!(fast_charge_config.qc2_0_disabled == false);
+        assert!(fast_charge_config.qc3_0_disabled == true);
+        assert!(fast_charge_config.fcp_disabled == false);
+        assert!(fast_charge_config.afc_disabled == true);
+        assert!(fast_charge_config.pe_disabled == false);
 
         i2c.done();
     }
@@ -930,14 +942,14 @@ mod tests {
 
         sw3526
             .set_fast_charge_config_0(FastChargeConfig0 {
-                scp_enabled: false,
-                vooc_enabled: true,
-                sfcp_enabled: false,
-                qc2_0_enabled: true,
-                qc3_0_enabled: false,
-                fcp_enabled: true,
-                afc_enabled: false,
-                pe_enabled: true,
+                scp_disabled: false,
+                vooc_disabled: true,
+                sfcp_disabled: false,
+                qc2_0_disabled: true,
+                qc3_0_disabled: false,
+                fcp_disabled: true,
+                afc_disabled: false,
+                pe_disabled: true,
             })
             .unwrap();
 
@@ -952,13 +964,13 @@ mod tests {
 
         let fast_charge_config = sw3526.get_fast_charge_config_1().unwrap();
 
-        assert!(fast_charge_config.pps1_enabled == true);
-        assert!(fast_charge_config.pps0_enabled == false);
-        assert!(fast_charge_config.pd_20v_enabled == true);
-        assert!(fast_charge_config.pd_15v_enabled == false);
-        assert!(fast_charge_config.pd_12v_enabled == true);
-        assert!(fast_charge_config.pd_9v_enabled == false);
-        assert!(fast_charge_config.pd_enabled == false);
+        assert!(fast_charge_config.pps1_disabled == true);
+        assert!(fast_charge_config.pps0_disabled == false);
+        assert!(fast_charge_config.pd_20v_disabled == true);
+        assert!(fast_charge_config.pd_15v_disabled == false);
+        assert!(fast_charge_config.pd_12v_disabled == true);
+        assert!(fast_charge_config.pd_9v_disabled == false);
+        assert!(fast_charge_config.pd_disabled == false);
 
         i2c.done();
     }
@@ -971,13 +983,13 @@ mod tests {
 
         sw3526
             .set_fast_charge_config_1(FastChargeConfig1 {
-                pps1_enabled: false,
-                pps0_enabled: true,
-                pd_20v_enabled: false,
-                pd_15v_enabled: true,
-                pd_12v_enabled: false,
-                pd_9v_enabled: true,
-                pd_enabled: true,
+                pps1_disabled: false,
+                pps0_disabled: true,
+                pd_20v_disabled: false,
+                pd_15v_disabled: true,
+                pd_12v_disabled: false,
+                pd_9v_disabled: true,
+                pd_disabled: true,
             })
             .unwrap();
 
