@@ -362,78 +362,78 @@ impl From<FastChargeConfig5> for u8 {
 
 #[derive(Debug)]
 pub struct FastChargeConfig0 {
-    pub scp_enabled: bool,
-    pub vooc_enabled: bool,
-    pub sfcp_enabled: bool,
-    pub qc2_0_enabled: bool,
-    pub qc3_0_enabled: bool,
-    pub fcp_enabled: bool,
-    pub afc_enabled: bool,
-    pub pe_enabled: bool,
+    pub scp_disabled: bool,
+    pub vooc_disabled: bool,
+    pub sfcp_disabled: bool,
+    pub qc2_0_disabled: bool,
+    pub qc3_0_disabled: bool,
+    pub fcp_disabled: bool,
+    pub afc_disabled: bool,
+    pub pe_disabled: bool,
 }
 
 impl From<u8> for FastChargeConfig0 {
     fn from(value: u8) -> Self {
         Self {
-            scp_enabled: (value & 0x80) != 0,
-            vooc_enabled: (value & 0x40) != 0,
-            sfcp_enabled: (value & 0x20) != 0,
-            qc2_0_enabled: (value & 0x10) != 0,
-            qc3_0_enabled: (value & 0x08) != 0,
-            fcp_enabled: (value & 0x04) != 0,
-            afc_enabled: (value & 0x02) != 0,
-            pe_enabled: (value & 0x01) != 0,
+            scp_disabled: (value & 0x80) != 0,
+            vooc_disabled: (value & 0x40) != 0,
+            sfcp_disabled: (value & 0x20) != 0,
+            qc2_0_disabled: (value & 0x10) != 0,
+            qc3_0_disabled: (value & 0x08) != 0,
+            fcp_disabled: (value & 0x04) != 0,
+            afc_disabled: (value & 0x02) != 0,
+            pe_disabled: (value & 0x01) != 0,
         }
     }
 }
 
 impl From<FastChargeConfig0> for u8 {
     fn from(value: FastChargeConfig0) -> Self {
-        (value.scp_enabled as u8) << 7
-            | (value.vooc_enabled as u8) << 6
-            | (value.sfcp_enabled as u8) << 5
-            | (value.qc2_0_enabled as u8) << 4
-            | (value.qc3_0_enabled as u8) << 3
-            | (value.fcp_enabled as u8) << 2
-            | (value.afc_enabled as u8) << 1
-            | (value.pe_enabled as u8)
+        (value.scp_disabled as u8) << 7
+            | (value.vooc_disabled as u8) << 6
+            | (value.sfcp_disabled as u8) << 5
+            | (value.qc2_0_disabled as u8) << 4
+            | (value.qc3_0_disabled as u8) << 3
+            | (value.fcp_disabled as u8) << 2
+            | (value.afc_disabled as u8) << 1
+            | (value.pe_disabled as u8)
     }
 }
 
 #[derive(Debug)]
 pub struct FastChargeConfig1 {
-    pub pps1_enabled: bool,
-    pub pps0_enabled: bool,
-    pub pd_20v_enabled: bool,
-    pub pd_15v_enabled: bool,
-    pub pd_12v_enabled: bool,
-    pub pd_9v_enabled: bool,
-    pub pd_enabled: bool,
+    pub pps1_disabled: bool,
+    pub pps0_disabled: bool,
+    pub pd_20v_disabled: bool,
+    pub pd_15v_disabled: bool,
+    pub pd_12v_disabled: bool,
+    pub pd_9v_disabled: bool,
+    pub pd_disabled: bool,
 }
 
 impl From<u8> for FastChargeConfig1 {
     fn from(value: u8) -> Self {
         Self {
-            pps1_enabled: (value & 0x80) != 0,
-            pps0_enabled: (value & 0x40) != 0,
-            pd_20v_enabled: (value & 0x20) != 0,
-            pd_15v_enabled: (value & 0x10) != 0,
-            pd_12v_enabled: (value & 0x08) != 0,
-            pd_9v_enabled: (value & 0x04) != 0,
-            pd_enabled: (value & 0x01) != 0,
+            pps1_disabled: (value & 0x80) != 0,
+            pps0_disabled: (value & 0x40) != 0,
+            pd_20v_disabled: (value & 0x20) != 0,
+            pd_15v_disabled: (value & 0x10) != 0,
+            pd_12v_disabled: (value & 0x08) != 0,
+            pd_9v_disabled: (value & 0x04) != 0,
+            pd_disabled: (value & 0x01) != 0,
         }
     }
 }
 
 impl From<FastChargeConfig1> for u8 {
     fn from(value: FastChargeConfig1) -> Self {
-        (value.pps1_enabled as u8) << 7
-            | (value.pps0_enabled as u8) << 6
-            | (value.pd_20v_enabled as u8) << 5
-            | (value.pd_15v_enabled as u8) << 4
-            | (value.pd_12v_enabled as u8) << 3
-            | (value.pd_9v_enabled as u8) << 2
-            | (value.pd_enabled as u8)
+        (value.pps1_disabled as u8) << 7
+            | (value.pps0_disabled as u8) << 6
+            | (value.pd_20v_disabled as u8) << 5
+            | (value.pd_15v_disabled as u8) << 4
+            | (value.pd_12v_disabled as u8) << 3
+            | (value.pd_9v_disabled as u8) << 2
+            | (value.pd_disabled as u8)
     }
 }
 
