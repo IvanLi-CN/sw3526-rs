@@ -34,21 +34,21 @@ pub enum Register {
     VidConfig1 = 0xAF,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum ProtocolStatus {
     OffLine = 0,
     OnLine = 1,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum VoltageStatus {
     _5V = 0,
     ProtocolVoltage = 1,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum PdVersion {
     Unknown = 0,
@@ -56,7 +56,7 @@ pub enum PdVersion {
     PD3_0 = 2,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum ProtocolIndication {
     Unknown = 0,
@@ -73,7 +73,7 @@ pub enum ProtocolIndication {
     AFC = 11,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct ProtocolIndicationResponse {
     pub protocol_status: ProtocolStatus,
     pub voltage_status: VoltageStatus,
@@ -105,21 +105,21 @@ impl From<ProtocolIndicationResponse> for u8 {
     }
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum PortStatus {
     Off = 0,
     On = 1,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum BuckStatus {
     Off = 0,
     On = 1,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct SystemStatusResponse {
     pub port_status: PortStatus,
     pub buck_status: BuckStatus,
@@ -140,35 +140,35 @@ impl From<SystemStatusResponse> for u8 {
     }
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum VinOvpStatus {
     Normal = 0,
     Ovp = 1,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum OverTemperatureAlarmStatus {
     Normal = 0,
     Alarm = 1,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum OverTemperatureShutdownStatus {
     Normal = 0,
     Shutdown = 1,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum OutputShortCircuitStatus {
     Normal = 0,
     Short = 1,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct AbnormalCaseResponse {
     pub vin_ovp_status: VinOvpStatus,
     pub over_temperature_alarm_status: OverTemperatureAlarmStatus,
@@ -196,21 +196,21 @@ impl From<AbnormalCaseResponse> for u8 {
     }
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum BuckForceOff {
     Nothing = 0,
     TurnOffOneSecond = 1,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum CCUnDrivenDurationBuckForceOff {
     Driven = 0,
     UnDriven = 1,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct BuckForceOffConfig {
     pub force_off: BuckForceOff,
     pub cc_un_driven_duration_buck_force_off: CCUnDrivenDurationBuckForceOff,
@@ -263,13 +263,13 @@ impl From<CcStatus> for u8 {
     }
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum PdCommand {
     HardReset = 1,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct PowerCommandRequest {
     /// PD source command send enable
     /// Write true, the command in (reg0x70[3:0]) will send. This bit is automatically cleared by hardware.
@@ -303,7 +303,7 @@ impl Default for PowerCommandRequest {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct FastChargeConfig6 {
     pub qc2_0_qc3_0_cable_compatible_and_offset_enabled: bool,
     pub pdo_link_with_vin: bool,
@@ -325,21 +325,21 @@ impl From<FastChargeConfig6> for u8 {
     }
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum ScpSelect {
     LowVoltage = 0,
     HighVoltage = 1,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum Pe2_0MaxVoltage {
     _12V = 0,
     _20V = 1,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct FastChargeConfig5 {
     pub scp_select: ScpSelect,
     pub pe2_0_max_voltage: Pe2_0MaxVoltage,
@@ -360,7 +360,7 @@ impl From<FastChargeConfig5> for u8 {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct FastChargeConfig0 {
     pub scp_disabled: bool,
     pub vooc_disabled: bool,
@@ -400,7 +400,7 @@ impl From<FastChargeConfig0> for u8 {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct FastChargeConfig1 {
     pub pps1_disabled: bool,
     pub pps0_disabled: bool,
@@ -437,7 +437,7 @@ impl From<FastChargeConfig1> for u8 {
     }
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum MaxOutputVoltageExceptPd {
     SameWithPd = 0,
@@ -445,7 +445,7 @@ pub enum MaxOutputVoltageExceptPd {
     _12V = 2,
     _20V = 3,
 }
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct FastChargeConfig2 {
     pub dpdm_enabled: bool,
     pub max_output_voltage_except_pd: MaxOutputVoltageExceptPd,
@@ -466,7 +466,7 @@ impl From<FastChargeConfig2> for u8 {
     }
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum PdCurrentLimitProtectMethod {
     /// UV mode, output voltage will go down when output current larger than current limit threshold
@@ -475,14 +475,14 @@ pub enum PdCurrentLimitProtectMethod {
     OC = 1,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum QC3_0CurrentLimitProtectMethod {
     CCLoop = 0,
     VoltageDrop = 1,
 }
 
-#[derive(TryFromPrimitive, Debug)]
+#[derive(TryFromPrimitive, Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum PowerSettingMethod {
     /// Rset resistance
@@ -491,7 +491,7 @@ pub enum PowerSettingMethod {
     Register = 1,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct FastChargeConfig3 {
     pub pd_current_limit_protect_method: PdCurrentLimitProtectMethod,
     pub qc3_0_current_limit_protect_method: QC3_0CurrentLimitProtectMethod,
@@ -522,7 +522,7 @@ impl From<FastChargeConfig3> for u8 {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct FastChargeConfig4 {
     /// if true, close all fast charge protocols
     pub port_fast_charge_disabled: bool,
