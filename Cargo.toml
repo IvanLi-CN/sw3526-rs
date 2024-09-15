@@ -1,6 +1,6 @@
 [package]
 name = "sw3526"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["Ivan Li <ivanli2048@gmail.com>"]
 edition = "2021"
 license = "MIT"
